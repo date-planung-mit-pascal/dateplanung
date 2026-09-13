@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f7e7ea">
+  <title>Date mit Lourdes</title>
+  <meta name="description" content="Eine persönliche Einladung zu einem Date.">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='8' y='12' width='48' height='44' rx='8' fill='%23c83255'/%3E%3Cpath d='M8 25h48M20 7v12M44 7v12' stroke='white' stroke-width='5'/%3E%3C/svg%3E">
+  <style>
+    :root{font-family:Inter,ui-rounded,"Segoe UI",sans-serif;color:#fff;background:#090713;font-synthesis:none}
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;background:linear-gradient(rgba(4,2,12,.36),rgba(4,2,12,.62)),url('./date-background.png') center/cover fixed no-repeat}
+    main{position:relative;width:min(620px,100%);min-height:440px;display:grid;place-items:center;text-align:center;background:rgba(17,10,28,.72);border:1px solid rgba(255,255,255,.22);border-radius:32px;padding:clamp(28px,6vw,60px);box-shadow:0 28px 80px rgba(0,0,0,.45);backdrop-filter:blur(14px)}
+    .step{display:none;width:100%;animation:enter .45s ease both}.step.active{display:block}
+    @keyframes enter{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+    h1{font-family:Georgia,serif;font-size:clamp(2rem,6vw,3.4rem);font-weight:500;line-height:1.12;margin:0 0 38px;letter-spacing:-.035em}
+    .actions{display:flex;justify-content:center;gap:14px;position:relative}
+    .no-message{min-height:34px;margin:18px 0 0;color:#ffccd8;font-weight:800;font-size:1.05rem}
+    .no-message.show{animation:messagePop .35s ease}
+    @keyframes messagePop{0%{opacity:0;transform:scale(.85) translateY(6px)}100%{opacity:1;transform:none}}
+    button{font:inherit;font-weight:700;border:0;border-radius:999px;padding:15px 34px;cursor:pointer;transition:.2s transform,.2s box-shadow,.2s background}
+    button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #7e2940;outline-offset:3px}
+    .primary{background:#c83255;color:#fff;box-shadow:0 10px 25px rgba(200,50,85,.26)}.primary:hover{transform:translateY(-2px);box-shadow:0 14px 28px rgba(200,50,85,.32)}
+    .secondary{background:#f2d9df;color:#7e2940}.secondary:hover{background:#ecd0d7}
+    .no-wrap{position:relative}.x{position:absolute;inset:50% auto auto 50%;transform:translate(-50%,-50%) scale(.3);color:#a71938;font-size:70px;line-height:1;font-weight:900;opacity:0;pointer-events:none;text-shadow:0 3px 0 white}.x.show{animation:nope .65s ease}
+    @keyframes nope{0%{opacity:0;transform:translate(-50%,-50%) scale(.3) rotate(-20deg)}35%,70%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(0)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.2)}}
+    form{display:grid;gap:20px;text-align:left;margin:auto;max-width:420px}.field{display:grid;gap:8px}.field label{font-weight:700;font-size:.95rem}.field input,.field select{width:100%;border:1px solid #e1bcc5;background:#fff;color:#432b31;border-radius:14px;padding:14px 16px;font:inherit;min-height:52px;color-scheme:light}
+    form .primary{margin-top:8px}.error{min-height:20px;color:#ffb9c9;text-align:center;font-size:.9rem;margin:0}.small{color:#eadde1;margin:-24px 0 28px}
+    .success h1{margin-bottom:16px}.success p{font-size:1.08rem;color:#eadde1;margin:0}
+    @media(max-width:480px){main{min-height:470px;border-radius:24px;padding:30px 22px}.actions{flex-direction:column}.actions button{width:100%}}
+    @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+  </style>
+</head>
+<body>
+  <main>
+    <section class="step active" id="invite">
+      <h1>Möchtest du mit mir auf ein Date gehen, Lourdes?</h1>
+      <div class="actions">
+        <button class="primary" id="yes" type="button">Ja</button>
+        <div class="no-wrap"><button class="secondary" id="no" type="button">Nein</button><span class="x" id="x" aria-hidden="true">×</span></div>
+      </div>
+      <p class="no-message" id="noMessage" role="status" aria-live="polite"></p>
+    </section>
+    <section class="step" id="schedule">
+      <h1>Wann soll unser Date sein?</h1>
+      <p class="small">Such dir einen Tag und eine Uhrzeit aus.</p>
+      <form id="dateForm">
+        <div class="field"><label for="date">Tag</label><input id="date" name="date" type="date" required></div>
+        <div class="field"><label for="time">Uhrzeit</label><select id="time" name="time" required><option value="">Uhrzeit auswählen</option></select></div>
+        <input type="hidden" name="_subject" value="Date-Bestätigung von Lourdes">
+        <input type="hidden" name="_captcha" value="false">
+        <p class="error" id="error" role="alert"></p>
+        <button class="primary" type="submit">Date bestätigen</button>
+      </form>
+    </section>
+    <section class="step success" id="success">
+      <h1>Super, ich freue mich auf ein Date mit dir!</h1>
+      <p id="summary"></p>
+    </section>
+  </main>
+  <script>
+    const invite=document.querySelector('#invite'),schedule=document.querySelector('#schedule'),success=document.querySelector('#success');
+    const show=id=>{document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));id.classList.add('active')};
+    document.querySelector('#yes').addEventListener('click',()=>show(schedule));
+    const noMessages=['Nein ist keine Option!','Sachma, geht’s noch?!','Falscher Button!','Das war wohl ein Versehen.','Netter Versuch.','Der Button funktioniert heute nicht.','Probier mal den anderen Button.','Diese Antwort akzeptiere ich nicht.','Du wolltest doch bestimmt „Ja“ drücken.','Nope. Versuch es noch einmal.'];
+    let noMessageIndex=0;
+    document.querySelector('#no').addEventListener('click',()=>{const x=document.querySelector('#x'),message=document.querySelector('#noMessage');x.classList.remove('show');message.classList.remove('show');void x.offsetWidth;x.classList.add('show');message.textContent=noMessages[noMessageIndex];message.classList.add('show');noMessageIndex=(noMessageIndex+1)%noMessages.length});
+    const date=document.querySelector('#date');date.min=new Date().toISOString().split('T')[0];
+    const time=document.querySelector('#time');for(let h=0;h<24;h++){const v=String(h).padStart(2,'0')+':00';time.add(new Option(v+' Uhr',v))}
+    document.querySelector('#dateForm').addEventListener('submit',async e=>{
+      e.preventDefault();const form=e.currentTarget,error=document.querySelector('#error'),button=form.querySelector('button');error.textContent='';button.disabled=true;button.textContent='Wird bestätigt …';
+      const fd=new FormData();fd.append('Date Tag',date.value);fd.append('Date Uhrzeit',time.value+' Uhr');fd.append('_subject','Date-Bestätigung von Lourdes');fd.append('_captcha','false');fd.append('_template','table');
+      try{const r=await fetch('https://formsubmit.co/ajax/pascalwulff11@icloud.com',{method:'POST',headers:{Accept:'application/json'},body:fd});if(!r.ok)throw new Error();const pretty=new Intl.DateTimeFormat('de-DE',{dateStyle:'long'}).format(new Date(date.value+'T12:00:00'));document.querySelector('#summary').textContent=pretty+' um '+time.value+' Uhr';show(success)}catch(err){error.textContent='Die Bestätigung konnte nicht gesendet werden. Bitte versuche es erneut.';button.disabled=false;button.textContent='Date bestätigen'}
+    });
+  </script>
+</body>
+</html>
