@@ -1,12 +1,12 @@
-<!doctype html>
-<html lang="de">
-<head>
-  <meta charset="utf-8">
+<!DOCTYPE html>
+<!-- saved from url=(0070)https://dateplanung-mit-pascal-und-lourdes.pascalwulff11.chatgpt.site/ -->
+<html lang="de"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#f7e7ea">
   <title>Date mit Lourdes</title>
   <meta name="description" content="Eine persönliche Einladung zu einem Date.">
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='8' y='12' width='48' height='44' rx='8' fill='%23c83255'/%3E%3Cpath d='M8 25h48M20 7v12M44 7v12' stroke='white' stroke-width='5'/%3E%3C/svg%3E">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=&#39;http://www.w3.org/2000/svg&#39; viewBox=&#39;0 0 64 64&#39;%3E%3Crect x=&#39;8&#39; y=&#39;12&#39; width=&#39;48&#39; height=&#39;44&#39; rx=&#39;8&#39; fill=&#39;%23c83255&#39;/%3E%3Cpath d=&#39;M8 25h48M20 7v12M44 7v12&#39; stroke=&#39;white&#39; stroke-width=&#39;5&#39;/%3E%3C/svg%3E">
   <style>
     :root{font-family:Inter,ui-rounded,"Segoe UI",sans-serif;color:#fff;background:#090713;font-synthesis:none}
     *{box-sizing:border-box}
@@ -25,16 +25,23 @@
     .secondary{background:#f2d9df;color:#7e2940}.secondary:hover{background:#ecd0d7}
     .no-wrap{position:relative}.x{position:absolute;inset:50% auto auto 50%;transform:translate(-50%,-50%) scale(.3);color:#a71938;font-size:70px;line-height:1;font-weight:900;opacity:0;pointer-events:none;text-shadow:0 3px 0 white}.x.show{animation:nope .65s ease}
     @keyframes nope{0%{opacity:0;transform:translate(-50%,-50%) scale(.3) rotate(-20deg)}35%,70%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(0)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.2)}}
-    form{display:grid;gap:20px;text-align:left;margin:auto;max-width:420px}.field{display:grid;gap:8px}.field label{font-weight:700;font-size:.95rem}.field input,.field select{width:100%;border:1px solid #e1bcc5;background:#fff;color:#432b31;border-radius:14px;padding:14px 16px;font:inherit;min-height:52px;color-scheme:light}
+    form{display:grid;gap:20px;text-align:left;margin:auto;max-width:420px}.field{display:grid;gap:8px}.field label{font-weight:700;font-size:.95rem}.field input,.field select,.field textarea{width:100%;border:1px solid #e1bcc5;background:#fff;color:#432b31;border-radius:14px;padding:14px 16px;font:inherit;min-height:52px;color-scheme:light}.field textarea{min-height:105px;resize:vertical}.field[hidden]{display:none}
     form .primary{margin-top:8px}.error{min-height:20px;color:#ffb9c9;text-align:center;font-size:.9rem;margin:0}.small{color:#eadde1;margin:-24px 0 28px}
     .success h1{margin-bottom:16px}.success p{font-size:1.08rem;color:#eadde1;margin:0}
-    @media(max-width:480px){main{min-height:470px;border-radius:24px;padding:30px 22px}.actions{flex-direction:column}.actions button{width:100%}}
+    @media(max-width:600px){
+      body{min-height:100svh;padding:12px;background-attachment:scroll;background-position:30% center}
+      main{width:100%;min-height:calc(100svh - 24px);border-radius:22px;padding:28px 20px;background:rgba(17,10,28,.68)}
+      h1{font-size:clamp(1.85rem,9vw,2.5rem);margin-bottom:30px}
+      .actions{flex-direction:column}
+      .actions button,.no-wrap{width:100%}
+      .field input,.field select,.field textarea{font-size:16px}
+    }
     @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
   </style>
 </head>
 <body>
   <main>
-    <section class="step active" id="invite">
+    <section class="step" id="invite">
       <h1>Möchtest du mit mir auf ein Date gehen, Lourdes?</h1>
       <div class="actions">
         <button class="primary" id="yes" type="button">Ja</button>
@@ -42,12 +49,27 @@
       </div>
       <p class="no-message" id="noMessage" role="status" aria-live="polite"></p>
     </section>
-    <section class="step" id="schedule">
+    <section class="step active" id="schedule">
       <h1>Wann soll unser Date sein?</h1>
-      <p class="small">Such dir einen Tag und eine Uhrzeit aus.</p>
+      <p class="small">Such dir einen Tag, eine Uhrzeit und eine Unternehmung aus.</p>
       <form id="dateForm">
-        <div class="field"><label for="date">Tag</label><input id="date" name="date" type="date" required></div>
-        <div class="field"><label for="time">Uhrzeit</label><select id="time" name="time" required><option value="">Uhrzeit auswählen</option></select></div>
+        <div class="field"><label for="date">Tag</label><input id="date" name="date" type="date" required="" min="2026-09-13"></div>
+        <div class="field"><label for="time">Uhrzeit</label><select id="time" name="time" required=""><option value="">Uhrzeit auswählen</option><option value="00:00">00:00 Uhr</option><option value="01:00">01:00 Uhr</option><option value="02:00">02:00 Uhr</option><option value="03:00">03:00 Uhr</option><option value="04:00">04:00 Uhr</option><option value="05:00">05:00 Uhr</option><option value="06:00">06:00 Uhr</option><option value="07:00">07:00 Uhr</option><option value="08:00">08:00 Uhr</option><option value="09:00">09:00 Uhr</option><option value="10:00">10:00 Uhr</option><option value="11:00">11:00 Uhr</option><option value="12:00">12:00 Uhr</option><option value="13:00">13:00 Uhr</option><option value="14:00">14:00 Uhr</option><option value="15:00">15:00 Uhr</option><option value="16:00">16:00 Uhr</option><option value="17:00">17:00 Uhr</option><option value="18:00">18:00 Uhr</option><option value="19:00">19:00 Uhr</option><option value="20:00">20:00 Uhr</option><option value="21:00">21:00 Uhr</option><option value="22:00">22:00 Uhr</option><option value="23:00">23:00 Uhr</option></select></div>
+        <div class="field">
+          <label for="activity">Was möchtest du unternehmen?</label>
+          <select id="activity" name="activity" required="">
+            <option value="">Unternehmung auswählen</option>
+            <option>Billiard spielen</option>
+            <option>Spazieren gehen &amp; Kaffee trinken</option>
+            <option>Weststadt besuchen (Assi gören beim Boxen zusehen)</option>
+            <option>Escape Room in Schwerin</option>
+            <option value="Etwas anderes">Etwas anderes</option>
+          </select>
+        </div>
+        <div class="field" id="customActivityField" hidden="">
+          <label for="customActivity">Deine Idee</label>
+          <textarea id="customActivity" name="customActivity" maxlength="500" placeholder="Schreib hier, was du gerne unternehmen möchtest."></textarea>
+        </div>
         <input type="hidden" name="_subject" value="Date-Bestätigung von Lourdes">
         <input type="hidden" name="_captcha" value="false">
         <p class="error" id="error" role="alert"></p>
@@ -68,11 +90,15 @@
     document.querySelector('#no').addEventListener('click',()=>{const x=document.querySelector('#x'),message=document.querySelector('#noMessage');x.classList.remove('show');message.classList.remove('show');void x.offsetWidth;x.classList.add('show');message.textContent=noMessages[noMessageIndex];message.classList.add('show');noMessageIndex=(noMessageIndex+1)%noMessages.length});
     const date=document.querySelector('#date');date.min=new Date().toISOString().split('T')[0];
     const time=document.querySelector('#time');for(let h=0;h<24;h++){const v=String(h).padStart(2,'0')+':00';time.add(new Option(v+' Uhr',v))}
+    const activity=document.querySelector('#activity'),customActivity=document.querySelector('#customActivity'),customActivityField=document.querySelector('#customActivityField');
+    activity.addEventListener('change',()=>{const custom=activity.value==='Etwas anderes';customActivityField.hidden=!custom;customActivity.required=custom;if(!custom)customActivity.value=''});
     document.querySelector('#dateForm').addEventListener('submit',async e=>{
       e.preventDefault();const form=e.currentTarget,error=document.querySelector('#error'),button=form.querySelector('button');error.textContent='';button.disabled=true;button.textContent='Wird bestätigt …';
-      const fd=new FormData();fd.append('Date Tag',date.value);fd.append('Date Uhrzeit',time.value+' Uhr');fd.append('_subject','Date-Bestätigung von Lourdes');fd.append('_captcha','false');fd.append('_template','table');
-      try{const r=await fetch('https://formsubmit.co/ajax/pascalwulff11@icloud.com',{method:'POST',headers:{Accept:'application/json'},body:fd});if(!r.ok)throw new Error();const pretty=new Intl.DateTimeFormat('de-DE',{dateStyle:'long'}).format(new Date(date.value+'T12:00:00'));document.querySelector('#summary').textContent=pretty+' um '+time.value+' Uhr';show(success)}catch(err){error.textContent='Die Bestätigung konnte nicht gesendet werden. Bitte versuche es erneut.';button.disabled=false;button.textContent='Date bestätigen'}
+      const activityText=activity.value==='Etwas anderes'?customActivity.value.trim():activity.value;
+      const fd=new FormData();fd.append('Date Tag',date.value);fd.append('Date Uhrzeit',time.value+' Uhr');fd.append('Unternehmung',activityText);fd.append('_subject','Date-Bestätigung von Lourdes');fd.append('_captcha','false');fd.append('_template','table');
+      try{const r=await fetch('https://formsubmit.co/ajax/pascalwulff11@icloud.com',{method:'POST',headers:{Accept:'application/json'},body:fd});if(!r.ok)throw new Error();const pretty=new Intl.DateTimeFormat('de-DE',{dateStyle:'long'}).format(new Date(date.value+'T12:00:00'));document.querySelector('#summary').textContent=pretty+' um '+time.value+' Uhr – '+activityText;show(success)}catch(err){error.textContent='Die Bestätigung konnte nicht gesendet werden. Bitte versuche es erneut.';button.disabled=false;button.textContent='Date bestätigen'}
     });
   </script>
-</body>
-</html>
+
+
+</body></html>
